@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+ }
+ body{
+    background:#9EE8C2;
+ }
+ .container{
+    width: 350px;
+    height: 400px;
+    background: #0c0b0bc7;
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    border-radius: 10px;
+ }
+ .inputvalue{
+    display: flex;
+    margin: 5px;
+    margin-bottom: 60px;
+
+ }
+ .inputVal{
+    width: 250px;
+    height: 40px;
+    border-radius: 5px;
+    margin-right: 5px;
+    border: 2px solid rgb(69, 5, 187)
+ }
+ .btn{
+    width: 100px;
+    background: hsl(206, 66%, 46%);
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: bold;
+    outline-style: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px #03110c;
+ }
+ .clearTask{
+    position: absolute;
+    width: 250px;
+    height: 35px;
+    background-color: orangered;
+    color: #ffffff;
+    bottom: 5px;
+    left: 15%;
+    border-radius: 5px;
+    text-transform: capitalize;
+    font-weight: bold;
+    cursor: pointer;
+    outline-style: none;
+
+
+ }
+
+.todoList{
+    display: flex;
+    width: 325px;
+    height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 5px;
+    background: #ffffff;
+    border-bottom: 1px solid gray;
+    border-radius: 5px;
+    box-shadow: 5px 5px rgb(0, 0, 1, 0.5);
+    font-weight: bold;
+    flex-wrap: wrap;
+}
+.deleteTask{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    text-align:center; 
+    border-radius: 50px;
+    background: orangered;
+    color: #ffffff;
+    outline: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+.pText{
+    background: #ffffff;
+    text-transform: capitalize;
+}
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="myTodo">
+            <div class="inputvalue">
+                <input class="inputVal" type="text" placeholder="Add your task" value="">
+                <button class="btn">Add Task</button>
+            </div>
+            
+            <div class="todoLists">
+                
+            </div>
+            <button class="clearTask" onclick="clearTask()">Clear all Task</button>
+        </div>
+    </div>
+<script>
+    const inputVal = document.getElementsByClassName('inputVal')[0];
+const addTaskBtn = document.getElementsByClassName('btn')[0];
+
+
+addTaskBtn.addEventListener('click', function (){
+if(inputVal.value.trim()!=0){
+      let localItems = JSON.parse( localStorage.getItem('localItem'))
+   if(localItems === null){
+        taskList = []
+
+   }else{
+       taskList = localItems;
+   }
+   taskList.push(inputVal.value)
+   localStorage.setItem('localItem', JSON.stringify(taskList)); 
+}
+
+   showItem()
+})
+
+function showItem(){
+   let localItems = JSON.parse( localStorage.getItem('localItem'))
+   if(localItems === null){
+        taskList = []
+
+   }else{
+       taskList = localItems;
+   }
+
+
+let html = '';
+let itemShow = document.querySelector('.todoLists');
+taskList.forEach((data, index )=> {
+   
+
+   html += `
+   <div class="todoList">
+   <p class="pText">${data}</p>
+   <button class="deleteTask" onClick="deleteItem(${index})">x</button>
+   </div>
+   `
+})
+itemShow.innerHTML = html;
+}
+showItem()
+
+function deleteItem(index){
+   let localItems = JSON.parse( localStorage.getItem('localItem'))
+   taskList.splice(index, 1)
+   localStorage.setItem('localItem', JSON.stringify(taskList));
+   showItem()
+}
+
+function clearTask(){
+   
+localStorage.clear()
+showItem()
+}
+</script>
+</body>
+</html>
